@@ -1,5 +1,9 @@
 import random
+from rich import print
+from rich.console import Console
+from rich.table import Table
 
+PERSONS_TO_GENERATE = 6
 
 class PersonGenerator:
     """Generates random data for managing family/personal accounts"""
@@ -35,7 +39,7 @@ class PersonGenerator:
         return '{0}@{1}'.format(nickname, domain)
 
     def generate_password(self):
-        characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@-*1234567890"
+        characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
         password = ''
         for i in range(self.password_length + 1):
             password += random.choice(characters)
@@ -66,8 +70,25 @@ class PersonGenerator:
                 item.get('Email'),
                 item.get('Password')
             ))
+		
+    def get_table_output(self, members):
+        persons = self.generate_person(members)
+        table = Table(title="Generated Persons: {0}".format(PERSONS_TO_GENERATE), show_lines=True, expand=True)
+        table.add_column("#", justify="center", style="white")
+        table.add_column("Person name", justify="left", style="green", no_wrap=True)
+        table.add_column("Credentials pair", style="white", no_wrap=True)
+
+        for count, item in enumerate(persons, start=1):
+                table.add_row(
+									str(count),
+					        "{0} {1}".format(item.get('First Name'), item.get('Last Name')),
+					        "{0};{1}".format(item.get('Email'), item.get('Password'))
+					        )
+			
+        console = Console()
+        console.print(table)
 
 
 prs = PersonGenerator()
 
-print(prs.get_cli_output(6))
+prs.get_table_output(PERSONS_TO_GENERATE)
