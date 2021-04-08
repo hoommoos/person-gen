@@ -83,7 +83,7 @@ class PersonGenerator:
 			      str(count),
 			      "{0} {1}".format(item.get('First Name'), item.get('Last Name')),
 			      "{0};{1}".format(item.get('Email'), item.get('Password'))
-					        )
+				)
 
         console = Console()
         console.print(table)
